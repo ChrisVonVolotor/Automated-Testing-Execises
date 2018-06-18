@@ -87,7 +87,22 @@ public class basic {
 		WebElement list = driver.findElementById("ui-id-1");
 		tags.click();
 		tags.sendKeys("B");
-		System.out.println(list.getSize());
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
+		assertEquals("block", list.getCssValue("display") );
+		tags.sendKeys("BORISMANANANANANA");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals("none", list.getCssValue("display") );
 
 	}
 	
