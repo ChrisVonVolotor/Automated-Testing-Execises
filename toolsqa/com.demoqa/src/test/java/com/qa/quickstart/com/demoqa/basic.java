@@ -79,6 +79,7 @@ public class basic {
 	}
 	
 	@Test
+	@Ignore
 	public void autocomplete() {
 		String url = "http://demoqa.com/autocomplete/";
 		driver.navigate().to(url);
@@ -86,15 +87,24 @@ public class basic {
 		WebElement tags = driver.findElementById("tagss");
 		WebElement list = driver.findElementById("ui-id-1");
 		tags.click();
-		tags.sendKeys("B");
+		tags.sendKeys("BAS");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println();
 		assertEquals("block", list.getCssValue("display") );
+		WebElement item = driver.findElementByXPath("//*[@id=\"ui-id-1\"]");
+		
+		item.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals("BASIC", tags.getAttribute("value"));
 		tags.sendKeys("BORISMANANANANANA");
 		try {
 			Thread.sleep(1000);
@@ -104,6 +114,39 @@ public class basic {
 		}
 		assertEquals("none", list.getCssValue("display") );
 
+	}
+	
+	@Test
+	@Ignore
+	public void datepicker() {
+		String url = "http://demoqa.com/datepicker/";
+		driver.navigate().to(url);
+		WebElement pickerBox = driver.findElementById("datepicker1");
+		
+		pickerBox.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		WebElement date = driver.findElementByXPath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[3]/td[5]/a");
+		date.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals("June 15, 2018", pickerBox.getAttribute("value"));
+	}
+	
+	@Test
+	public void menu() {
+		String url = "http://demoqa.com/menu/";
+		driver.navigate().to(url);
+		
+		driver.findElementsById("#ui-id-2");
 	}
 	
 	@After
