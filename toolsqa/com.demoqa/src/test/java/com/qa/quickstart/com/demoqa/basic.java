@@ -3,28 +3,32 @@ package com.qa.quickstart.com.demoqa;
 import static org.junit.Assert.*;
 
 import java.awt.Desktop.Action;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+
 public class basic {
 	
 	public ChromeDriver driver;
 	static ExtentReports extent;
-	
+
 	@Before
 	public void setup() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Documents\\Development\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		extent= new ExtentReports("C:\\Users\\Admin\\Documents\\WebAutomaticTesting\\toolsqa\\com.demoqa\\Reports\\extent.html", false);
-
 	}
 	
 	@Test
@@ -253,15 +257,20 @@ public class basic {
 	}
 	
 	@Test
+	@Ignore
 	public void menu() {
-		//ExtentTest test1 = extent.startTest("Menu Hover");
+		//unfinished
+		System.out.println("WOW");
+		 Actions action = new Actions(driver);
+
+		ExtentTest test1 = extent.startTest("Menu Hover");
 		String url = "http://demoqa.com/menu/";
 		driver.navigate().to(url);
-		
 		WebElement selMenu = driver.findElementById("ui-id-2");
 		selMenu.click();
-		Actions action = new Actions(driver);
 		WebElement menu = driver.findElementByXPath("//*[@id=\"navigate\"]/ul/li[1]/a");
+		WebElement subMenu = driver.findElementByXPath("//*[@id=\"navigate\"]/ul/li[1]/ul/li[1]");
+		
 		action.moveToElement(menu).build().perform();
 		
 		try {
@@ -270,14 +279,67 @@ public class basic {
 			e.printStackTrace();
 		}
 		
-		//driver.getMouse().mouseMove();
+	}
+	@Ignore
+	@Test
+	public void slider() {
+		Actions action = new Actions(driver);
+		ExtentTest test1 = extent.startTest("Slider");
+		String url = "http://demoqa.com/slider/";
+		driver.navigate().to(url);
+		//WebElement slider = (new WebDriverWait(driver, 10)) .until(ExpectedConditions.presenceOfElementLocated(By.className("ui-slider-handle ui-state-default ui-corner-all"))); 
+		WebElement display = driver.findElementByXPath("//*[@id=\"amount1\"]");
+		System.out.print(display.getText());
+		//Integer num1 = Integer.parseInt(display.getText());
+		
+		action.moveToElement(display,50,40).clickAndHold().moveByOffset(300, 0).release().perform();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//Integer num2 = Integer.parseInt(display.getText());
+		try {
+		assertEquals("6", display.getAttribute("value"));
+		test1.log(LogStatus.PASS, "Slider slide slylylylylyly");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 	}
 	
+	@Test
+	@Ignore
+	public void toolTip() {
+		Actions action = new Actions(driver);
+		ExtentTest test1 = extent.startTest("Slider");
+		String url = "http://demoqa.com/tooltip/";
+		driver.navigate().to(url);
+
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		WebElement age = driver.findElementById("age");
+		action.moveToElement(age).pause(2500).build().perform();
+		try {
+			assertNotNull(driver.findElementByClassName("ui-tooltip-content").getText());
+			test1.log(LogStatus.PASS, "Tool Tip'd m'browser");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
+	}
+	
+
+
+
 	@After
 	public void tearDown() {
 		driver.close();
 		extent.flush();
 	}
- 
-
 }
