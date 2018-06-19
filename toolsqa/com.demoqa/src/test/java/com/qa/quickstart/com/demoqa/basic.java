@@ -2,10 +2,15 @@ package com.qa.quickstart.com.demoqa;
 
 import static org.junit.Assert.*;
 
+import java.awt.Desktop.Action;
+
 import org.junit.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.internal.Coordinates;
+
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -13,24 +18,19 @@ public class basic {
 	
 	public ChromeDriver driver;
 	static ExtentReports extent;
-
-	@BeforeClass
-	public void init() {
-		extent= new ExtentReports("C:\\Users\\Admin\\Documents\\WebAutomaticTesting\\toolsqa\\com.demoqa\\Reports\\extent.html", true);
-	}
 	
 	@Before
 	public void setup() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Documents\\Development\\chromedriver_win32\\chromedriver.exe");
-
 		driver = new ChromeDriver();
+		extent= new ExtentReports("C:\\Users\\Admin\\Documents\\WebAutomaticTesting\\toolsqa\\com.demoqa\\Reports\\extent.html", false);
+
 	}
 	
 	@Test
 	@Ignore
 	public void tabs() {
 		ExtentTest test1 = extent.startTest("Tabs Utility");
-		driver.manage().window().maximize();
 		String url = "http://demoqa.com/tabs/";
 		driver.navigate().to(url);
 		//tabs
@@ -41,7 +41,7 @@ public class basic {
 		WebElement text2 = driver.findElementById("tabs-2");
 		WebElement text3 = driver.findElementById("tabs-3");
 		
-		System.out.println(text1.getAttribute("aria-hidden"));
+		tab1.click();
 		try {
 		assertEquals("false",text1.getAttribute("aria-hidden"));
 		test1.log(LogStatus.PASS, "Tab 1 Selected.");
@@ -84,7 +84,8 @@ public class basic {
 	@Test
 	@Ignore
 	public void accordian() {
-		driver.manage().window().maximize();
+		ExtentTest test1 = extent.startTest("Accordian Tabs");
+		
 		String url = "http://demoqa.com/accordion/";
 		driver.navigate().to(url);
 		//tabs
@@ -97,98 +98,185 @@ public class basic {
 		WebElement text2 = driver.findElementById("ui-id-7");
 		WebElement text3 = driver.findElementById("ui-id-9");
 		WebElement text4 = driver.findElementById("ui-id-11");
-
 		
-		System.out.println(text1.getAttribute("aria-hidden"));
+		tab1.click();
+		try {
 		assertEquals("false",text1.getAttribute("aria-hidden"));
+		test1.log(LogStatus.PASS, "Tab 1 Selected.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 		tab2.click();
+		try {
 		assertEquals("true",text1.getAttribute("aria-hidden"));
 		assertEquals("false",text2.getAttribute("aria-hidden"));
+		test1.log(LogStatus.PASS, "Tab 1 Hidden When Tab 2 Selected.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 		tab3.click();
+		try {
 		assertEquals("true",text2.getAttribute("aria-hidden"));
 		assertEquals("false",text3.getAttribute("aria-hidden"));
+		test1.log(LogStatus.PASS, "Tab 2 Hidden When Tab 3 Selected.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 		tab4.click();
+		try {
 		assertEquals("true",text3.getAttribute("aria-hidden"));
 		assertEquals("false",text4.getAttribute("aria-hidden"));
-
-
+		test1.log(LogStatus.PASS, "Tab 3 Hidden When Tab 4 Selected.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 	}
 	
 	@Test
 	@Ignore
 	public void autocomplete() {
+		ExtentTest test1 = extent.startTest("Autocomplete");
+
 		String url = "http://demoqa.com/autocomplete/";
 		driver.navigate().to(url);
 
 		WebElement tags = driver.findElementById("tagss");
 		WebElement list = driver.findElementById("ui-id-1");
 		tags.click();
+		test1.log(LogStatus.INFO, "Make a valid Searh");
 		tags.sendKeys("BAS");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
 		assertEquals("block", list.getCssValue("display") );
+		test1.log(LogStatus.PASS, "Drop Down Displayed");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
+		
 		WebElement item = driver.findElementByXPath("//*[@id=\"ui-id-1\"]");
 		
 		item.click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
 		assertEquals("BASIC", tags.getAttribute("value"));
+		test1.log(LogStatus.PASS, "Selection Confirmed");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
+		test1.log(LogStatus.INFO, "Make an Incorrect Search");
 		tags.sendKeys("BORISMANANANANANA");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
 		assertEquals("none", list.getCssValue("display") );
-
+		test1.log(LogStatus.PASS, "No results Confimed");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 	}
 	
 	@Test
 	@Ignore
 	public void datepicker() {
+		ExtentTest test1 = extent.startTest("Date picker");
+
 		String url = "http://demoqa.com/datepicker/";
 		driver.navigate().to(url);
 		WebElement pickerBox = driver.findElementById("datepicker1");
-		
+		test1.log(LogStatus.INFO, "Bring up calander");
+
 		pickerBox.click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		test1.log(LogStatus.INFO, "Select date");
 		WebElement date = driver.findElementByXPath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[3]/td[5]/a");
 		date.click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
 		assertEquals("June 15, 2018", pickerBox.getAttribute("value"));
+		test1.log(LogStatus.PASS, "Date selected was input into textbox");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 	}
 	
 	@Test
 	public void menu() {
+		//ExtentTest test1 = extent.startTest("Menu Hover");
 		String url = "http://demoqa.com/menu/";
 		driver.navigate().to(url);
 		
-		driver.findElementsById("#ui-id-2");
+		WebElement selMenu = driver.findElementById("ui-id-2");
+		selMenu.click();
+		Actions action = new Actions(driver);
+		WebElement menu = driver.findElementByXPath("//*[@id=\"navigate\"]/ul/li[1]/a");
+		action.moveToElement(menu).build().perform();
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		//driver.getMouse().mouseMove();
 	}
 	
 	@After
 	public void tearDown() {
 		driver.close();
-		extent.fluch();
+		extent.flush();
 	}
  
 
