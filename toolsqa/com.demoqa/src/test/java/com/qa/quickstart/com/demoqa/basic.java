@@ -6,11 +6,18 @@ import org.junit.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 public class basic {
-	public ChromeDriver driver;
 	
+	public ChromeDriver driver;
+	static ExtentReports extent;
 
+	@BeforeClass
+	public void init() {
+		extent= new ExtentReports("C:\\Users\\Admin\\Documents\\WebAutomaticTesting\\toolsqa\\com.demoqa\\Reports\\extent.html", true);
+	}
 	
 	@Before
 	public void setup() {
@@ -22,6 +29,7 @@ public class basic {
 	@Test
 	@Ignore
 	public void tabs() {
+		ExtentTest test1 = extent.startTest("Tabs Utility");
 		driver.manage().window().maximize();
 		String url = "http://demoqa.com/tabs/";
 		driver.navigate().to(url);
@@ -34,14 +42,42 @@ public class basic {
 		WebElement text3 = driver.findElementById("tabs-3");
 		
 		System.out.println(text1.getAttribute("aria-hidden"));
+		try {
 		assertEquals("false",text1.getAttribute("aria-hidden"));
+		test1.log(LogStatus.PASS, "Tab 1 Selected.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
+		
 		tab2.click();
+		try {
 		assertEquals("true",text1.getAttribute("aria-hidden"));
 		assertEquals("false",text2.getAttribute("aria-hidden"));
+		test1.log(LogStatus.PASS, "Tab 1 Hidden on Tab2 Shown.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 		tab3.click();
+		try {
 		assertEquals("true",text2.getAttribute("aria-hidden"));
 		assertEquals("false",text3.getAttribute("aria-hidden"));
-
+		test1.log(LogStatus.PASS, "Tab 2 Hidden on Tab 3 Shown.");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 
 	}
 	
@@ -152,7 +188,8 @@ public class basic {
 	@After
 	public void tearDown() {
 		driver.close();
+		extent.fluch();
 	}
-	
+ 
 
 }
