@@ -32,7 +32,6 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void tabs() {
 		ExtentTest test1 = extent.startTest("Tabs Utility");
 		String url = "http://demoqa.com/tabs/";
@@ -86,7 +85,6 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void accordian() {
 		ExtentTest test1 = extent.startTest("Accordian Tabs");
 		
@@ -153,9 +151,9 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void autocomplete() {
 		ExtentTest test1 = extent.startTest("Autocomplete");
+		Actions action = new Actions(driver);
 
 		String url = "http://demoqa.com/autocomplete/";
 		driver.navigate().to(url);
@@ -165,11 +163,8 @@ public class basic {
 		tags.click();
 		test1.log(LogStatus.INFO, "Make a valid Searh");
 		tags.sendKeys("BAS");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		action.pause(1000).perform();
+
 		
 		try {
 		assertEquals("block", list.getCssValue("display") );
@@ -185,11 +180,8 @@ public class basic {
 		WebElement item = driver.findElementByXPath("//*[@id=\"ui-id-1\"]");
 		
 		item.click();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		action.pause(1000).perform();
+
 		try {
 		assertEquals("BASIC", tags.getAttribute("value"));
 		test1.log(LogStatus.PASS, "Selection Confirmed");
@@ -221,9 +213,9 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void datepicker() {
 		ExtentTest test1 = extent.startTest("Date picker");
+		 Actions action = new Actions(driver);
 
 		String url = "http://demoqa.com/datepicker/";
 		driver.navigate().to(url);
@@ -231,19 +223,12 @@ public class basic {
 		test1.log(LogStatus.INFO, "Bring up calander");
 
 		pickerBox.click();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		action.pause(1000).perform();
 		test1.log(LogStatus.INFO, "Select date");
 		WebElement date = driver.findElementByXPath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[3]/td[5]/a");
 		date.click();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		action.pause(1000).perform();
+
 		try {
 		assertEquals("June 15, 2018", pickerBox.getAttribute("value"));
 		test1.log(LogStatus.PASS, "Date selected was input into textbox");
@@ -257,30 +242,33 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void menu() {
-		//unfinished
-		System.out.println("WOW");
 		 Actions action = new Actions(driver);
 
 		ExtentTest test1 = extent.startTest("Menu Hover");
 		String url = "http://demoqa.com/menu/";
 		driver.navigate().to(url);
+		
 		WebElement selMenu = driver.findElementById("ui-id-2");
 		selMenu.click();
-		WebElement menu = driver.findElementByXPath("//*[@id=\"navigate\"]/ul/li[1]/a");
-		WebElement subMenu = driver.findElementByXPath("//*[@id=\"navigate\"]/ul/li[1]/ul/li[1]");
-		
-		action.moveToElement(menu).build().perform();
+		action.pause(500).perform();
+		WebElement menu = driver.findElementByXPath("//*[@id=\"tabs-2\"]/div//*[@id=\"navigate\"]/ul/li[1]");
+		WebElement subMenu = driver.findElementByXPath("//*[@id=\"tabs-2\"]/div//*[@id=\"navigate\"]/ul/li[1]/ul/li[1]");
+
+		action.moveToElement(menu).pause(1000).moveByOffset(100, 0).pause(2000).build().perform();
 		
 		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
+			assertEquals("rgba(255, 153, 0, 1)", subMenu.getCssValue("background-color"));
+			test1.log(LogStatus.PASS, "Hover Menu is GOLD. Always beleive in GOLD.");
+			}catch(AssertionError e) {
+				test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+				fail();
+			}finally {
+				test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+				extent.endTest(test1);
+			}
 	}
-	@Ignore
+
 	@Test
 	public void slider() {
 		Actions action = new Actions(driver);
@@ -312,7 +300,6 @@ public class basic {
 	}
 	
 	@Test
-	@Ignore
 	public void toolTip() {
 		Actions action = new Actions(driver);
 		ExtentTest test1 = extent.startTest("Slider");
@@ -334,8 +321,65 @@ public class basic {
 		}
 	}
 	
+	@Test
+	public void draggable() {
+		Actions action = new Actions(driver);
+		ExtentTest test1 = extent.startTest("Slider");
+		String url = "http://demoqa.com/droppable/";
+		driver.navigate().to(url);
 
+		WebElement draggable = driver.findElementById("draggableview");
+		WebElement target = driver.findElementById("droppableview");
+		
+		action.moveToElement(draggable).clickAndHold().moveByOffset(160, 20).release().pause(2000).build().perform();
+		System.out.println(target.getText());
+		try {
+		assertEquals("Dropped!",target.getText());
+		test1.log(LogStatus.PASS, "Dropped");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 
+	}
+	
+	@Test
+	public void selectable() {
+		Actions action = new Actions(driver);
+		ExtentTest test1 = extent.startTest("Selectable");
+		String url = "http://demoqa.com/selectable/";
+		driver.navigate().to(url);
+		
+		WebElement item1 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[1]");
+		WebElement item2 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[2]");
+		WebElement item3 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[3]");
+		WebElement item4 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[4]");
+		WebElement item5 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[5]");
+		WebElement item6 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[6]");
+		WebElement item7 = driver.findElementByXPath("//*[@id=\"selectable\"]/li[7]");
+		
+		action.moveToElement(item1).clickAndHold().moveByOffset(20, 150).release().pause(2000).build().perform();
+		System.out.println(item1.getAttribute("class"));
+		try {
+		assertEquals("ui-widget-content ui-corner-left ui-selectee ui-selected", item1.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee ui-selected", item2.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee ui-selected", item3.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee ui-selected", item4.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee ui-selected", item5.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee", item6.getAttribute("class"));
+		assertEquals("ui-widget-content ui-corner-left ui-selectee", item7.getAttribute("class"));
+		test1.log(LogStatus.PASS, "Selectable 1-5 selected, Selectable 6-7 Unselected");
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
+	}
 
 	@After
 	public void tearDown() {
