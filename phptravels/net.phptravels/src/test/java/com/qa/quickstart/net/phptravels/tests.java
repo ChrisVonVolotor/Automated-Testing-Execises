@@ -36,8 +36,7 @@ public class tests {
 		driver.navigate().to(url);
 		driver.manage().window().maximize();
 
-			action.pause(2000).build().perform();;
-
+		action.pause(2000).build().perform();
 
 		homePage home = PageFactory.initElements(driver, homePage.class);
 				
@@ -46,12 +45,12 @@ public class tests {
 		home.setAdults3(driver);
 		home.submit();
 
-			action.pause(2000).build().perform();;
+		action.pause(2000).build().perform();
 
 		resultPage result = PageFactory.initElements(driver, resultPage.class);
 		result.submit();
 		
-			action.pause(2000).build().perform();;
+		action.pause(2000).build().perform();
 
 		hotelPage hotel = PageFactory.initElements(driver, hotelPage.class);
 		hotel.submit();		
@@ -59,13 +58,13 @@ public class tests {
 		try {
 			assertTrue(false);
 			test1.log(LogStatus.PASS, "Just Need To Pay");
-			}catch(AssertionError e) {
-				test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
-				fail();
-			}finally {
-				test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
-				extent.endTest(test1);
-			}
+		}catch(AssertionError e) {
+			test1.log(LogStatus.FAIL, "oof, ouch, owie my code");
+			fail();
+		}finally {
+			test1.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test1);
+		}
 		
 		
 		
@@ -75,6 +74,7 @@ public class tests {
 	@After
 	public void tearDown() {
 		driver.close();
+		driver.quit();
 		extent.flush();
 	}
 }

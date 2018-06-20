@@ -8,8 +8,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class homePage {
-	@FindBy(xpath="//*[@id=\"select2-drop\"]")
-	private WebElement boris;
+	@FindBy(id="select2-drop-mask")
+	private WebElement mask;
+	
+	@FindBy(id="select2-drop")
+	private WebElement cityBarContainer;
 	
 	@FindBy(css="#select2-drop > div > input")
 	private WebElement cityBar;
@@ -79,10 +82,12 @@ public class homePage {
 	
 	public void setCity(ChromeDriver driver) {
 		Actions action = new Actions(driver);
+		
 		action.pause(2000).build().perform();
-		boris.click();
+		mask.click();
+		cityBarContainer.click();
 		action.pause(2000).build().perform();
-		action.moveToElement(boris).click().sendKeys("Lond").pause(2000).moveToElement(citybarResult1).click().build().perform();
+		action.moveToElement(cityBarContainer).click().sendKeys("Lond").pause(2000).moveToElement(citybarResult1).click().build().perform();
 		//cityBar.sendKeys("Lond");
 		//action.pause(2000).build().perform();
 		//citybarResult1.click();
