@@ -12,9 +12,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.qa.quickstart.com.demoqa.pages.homePage;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -29,6 +31,15 @@ public class basic {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Documents\\Development\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		extent= new ExtentReports("C:\\Users\\Admin\\Documents\\WebAutomaticTesting\\toolsqa\\com.demoqa\\Reports\\extent.html", false);
+	}
+	@Test
+	public void pomTest() {
+		String url = "http://demoqa.com/tabs/";
+		driver.navigate().to(url);
+		
+		homePage home = PageFactory.initElements(driver, homePage.class);
+		home.clickButton();
+		
 	}
 	
 	@Test
@@ -302,7 +313,7 @@ public class basic {
 	@Test
 	public void toolTip() {
 		Actions action = new Actions(driver);
-		ExtentTest test1 = extent.startTest("Slider");
+		ExtentTest test1 = extent.startTest("Tool Tip");
 		String url = "http://demoqa.com/tooltip/";
 		driver.navigate().to(url);
 
