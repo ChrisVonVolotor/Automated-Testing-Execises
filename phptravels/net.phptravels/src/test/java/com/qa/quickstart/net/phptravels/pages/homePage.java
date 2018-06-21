@@ -1,5 +1,6 @@
 package com.qa.quickstart.net.phptravels.pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -42,52 +43,19 @@ public class homePage {
 	private WebElement searchBut;
 	
 	
-	
-	public void setCity(WebDriver driver) {
-		Actions action = new Actions(driver);
-		cityBar.click();
-		cityBar.sendKeys("Lond");
-		action.pause(2000);
-		citybarResult1.click();
-		
-		
-	}
-	
-	public void setDates(WebDriver driver) {
-		Actions action = new Actions(driver);
-
-		date1.click();
-		//action.pause(500).build().perform();;
-
-		date1Pick.click();
-		//date2.click();
-	//	action.pause(2000).build().perform();;
-
-		action.moveToElement(date2Pick).click().build().perform();;
-		//date2Pick.click();
-		//action.pause(2000).build().perform();;
-		
-		return;
-	}
-	
-	public void setAdults3(WebDriver driver) {
-		Actions action = new Actions(driver);
-
-		adultPick.click();
-		action.pause(2000).build().perform();
-
-		adultPickInc.click();
-		return;
-	}
-	
 	public void setCity(ChromeDriver driver) {
 		Actions action = new Actions(driver);
 		
-		action.pause(2000).build().perform();
-		mask.click();
-		cityBarContainer.click();
-		action.pause(2000).build().perform();
-		action.moveToElement(cityBarContainer).click().sendKeys("Lond").pause(2000).moveToElement(citybarResult1).click().build().perform();
+	//	action.pause(2000).build().perform();
+	//	mask.click();
+	//	cityBarContainer.click();
+		//action.pause(2000).build().perform();
+		action.moveByOffset(500, 300).perform();
+		action.click().perform();
+		action.sendKeys("Lond").perform();
+		action.pause(2500).perform();
+		action.sendKeys(Keys.RETURN).perform();
+		//action.moveByOffset(350, 260).contextClick().sendKeys("Lond").pause(2000).moveToElement(citybarResult1).click().build().perform();
 		//cityBar.sendKeys("Lond");
 		//action.pause(2000).build().perform();
 		//citybarResult1.click();
@@ -114,7 +82,7 @@ public class homePage {
 		Actions action = new Actions(driver);
 
 		adultPick.click();
-		action.pause(2000).build().perform();;
+		//action.pause(2000).build().perform();;
 
 		adultPickInc.click();
 		return;
