@@ -120,11 +120,13 @@ public class demoSiteBasic {
 
 			logger(username,password,submit,lUsername,lPassword);
 			System.out.println("usr: " + lUsername + " pass: " + lPassword);
-			//System.out.println(win.getCssValue("color"));
+			win = driver.findElementByXPath("/html/body/table/tbody/tr/td[1]/big/blockquote/blockquote/font");
+
+			System.out.println(win.getCssValue("color"));
 			System.out.println("");
 			
 			try {
-			assertEquals("**Successful Login**", "**Successful Login**");
+			assertEquals("rgba(255, 0, 0, 1)", win.getCssValue("color"));
 			test.log(LogStatus.PASS, lUsername + " Login Successfull.");
 			}catch(AssertionError e) {
 				test.log(LogStatus.FAIL, "oof, ouch, owie my code");
